@@ -2,9 +2,43 @@
 
 Command line client for the [Ceryx](https://github.com/withlogicco/ceryx) API.
 
+## Install
+
+### Install script
+
+Installs the latest release to `/usr/local/bin` (uses `sudo` if needed):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/withlogicco/ceryx-cli/main/install.sh | sh
+```
+
+Set `CERYX_VERSION=v0.1.0` for a specific release or `INSTALL_DIR=~/.local/bin` for another directory, e.g. `curl -fsSL … | INSTALL_DIR=~/.local/bin sh`.
+
+### Download from the latest release
+
+Binaries for macOS and Linux (arm64, amd64) are on the [releases](https://github.com/withlogicco/ceryx-cli/releases) page as `ceryx_<os>_<arch>`:
+
+```sh
+os=$(uname -s | tr A-Z a-z); arch=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+curl -fsSL -o ceryx "https://github.com/withlogicco/ceryx-cli/releases/latest/download/ceryx_${os}_${arch}"
+chmod +x ceryx && sudo mv ceryx /usr/local/bin/
+```
+
+### Install with Go
+
 ```sh
 go install github.com/withlogicco/ceryx-cli/cmd/ceryx@latest
 ```
+
+### Install with bin
+
+With [bin](https://github.com/marcosnils/bin):
+
+```sh
+bin install github.com/withlogicco/ceryx-cli
+```
+
+## Configure
 
 The CLI talks to `http://localhost:8080` by default. Point it elsewhere with `--api-url` or `CERYX_API_URL`:
 
