@@ -183,3 +183,15 @@ $ ceryx certs delete '*.example.com'
 `certs patch` changes a stored certificate without uploading it again. `--cert` and `--key` go together, and a new certificate drops the old chain unless you pass `--chain`.
 
 Run `ceryx <command> --help` for all flags.
+
+## Development
+
+Builds and tests run in Docker, so only Docker with buildx is needed:
+
+```sh
+docker buildx build --target test .                           # go vet + go test
+docker buildx build --platform darwin/arm64 --output bin .    # bin/ceryx for an Apple Silicon Mac
+docker buildx build --platform darwin/arm64,linux/amd64 --output dist .  # dist/<os>_<arch>/ceryx
+```
+
+In VS Code these are the `build`, `build: release binaries` and `test` tasks; `bin/` is on the `PATH` of VS Code terminals.

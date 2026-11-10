@@ -1,0 +1,30 @@
+{
+    // Everything runs through docker buildx, so only Docker is needed on the host.
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "detail": "Build ./bin/ceryx for this machine (on PATH in VS Code terminals)",
+            "type": "shell",
+            "command": "docker buildx build --platform \"$(uname -s | tr A-Z a-z)/$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')\" --output bin .",
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": []
+        },
+        {
+            "label": "build: release binaries",
+            "detail": "Build dist/<os>_<arch>/ceryx for macOS and Linux",
+            "type": "shell",
+            "command": "docker buildx build --platform darwin/arm64,darwin/amd64,linux/arm64,linux/amd64 --output dist .",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "detail": "go vet + go test in Docker",
+            "type": "shell",
+            "command": "docker buildx build --target test --no-cache-filter test .",
+            "group": { "kind": "test", "isDefault": true },
+            "problemMatcher": []
+        }
+    ]
+}
