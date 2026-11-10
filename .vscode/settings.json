@@ -1,0 +1,21 @@
+{
+    "window.title": "ceryx-cli",
+    // Editor support only; build and test via the Docker tasks in tasks.json.
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    // ./bin/ceryx from the "build" task is on PATH in VS Code terminals.
+    "terminal.integrated.env.osx": {
+        "PATH": "${workspaceFolder}/bin:${env:PATH}"
+    },
+    "terminal.integrated.env.linux": {
+        "PATH": "${workspaceFolder}/bin:${env:PATH}"
+    },
+    "search.exclude": {
+        "bin/**": true,
+        "dist/**": true
+    }
+}
