@@ -28,7 +28,14 @@ curl -fsSL -o "$tmp" "$url"
 chmod 755 "$tmp"
 
 sudo=
-[ -w "$dir" ] || sudo=sudo
+# Walk up to the nearest existing directory so a missing INSTALL_DIR (even
+# nested, like ~/.local/bin on a fresh account) is created as the user, not
+# as root, whenever an existing ancestor is writable.
+ancestor=$dir
+while [ ! -d "$ancestor" ] && [ "$ancestor" != "/" ]; do
+	ancestor=$(dirname "$ancestor")
+done
+[ -w "$ancestor" ] || sudo=sudo
 $sudo mkdir -p "$dir"
 $sudo mv "$tmp" "$dir/ceryx"
 echo "installed $("$dir/ceryx" --version) to $dir/ceryx"

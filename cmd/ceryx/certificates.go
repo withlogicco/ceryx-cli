@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -90,7 +91,11 @@ func certBody(f *pflag.FlagSet) (map[string]any, error) {
 	if f.Changed("meta") {
 		raw, _ := f.GetString("meta")
 		var meta map[string]any
-		if err := json.Unmarshal([]byte(raw), &meta); err != nil {
+		// UseNumber keeps big integers exact; decoding into map[string]any
+		// alone would round them through float64 before re-encoding.
+		dec := json.NewDecoder(strings.NewReader(raw))
+		dec.UseNumber()
+		if err := dec.Decode(&meta); err != nil {
 			return nil, usageError{errors.New("--meta must be a JSON object: " + err.Error())}
 		}
 		body["meta"] = meta
